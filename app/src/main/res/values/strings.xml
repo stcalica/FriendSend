@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FriendSend</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">465832180238782</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_make_request">Request Delivery</string>
+    <string name="make_request_title">Choose Your Options</string>
+    <string name="title_activity_make_request_details">makeRequestDetails</string>
+
+</resources>
