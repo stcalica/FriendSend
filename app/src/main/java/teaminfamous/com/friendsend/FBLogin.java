@@ -61,7 +61,7 @@ public class FBLogin  extends ActionBarActivity{
     JSONObject fbResponse;
     String fb_user_id;
     String fb_name;
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
 //    String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
 
     public void PopulateFriends() {
@@ -103,7 +103,7 @@ public class FBLogin  extends ActionBarActivity{
             public void onSuccess(LoginResult loginResult) {
                 Toast toast = Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_LONG);
                 toast.show();
-                GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback(){
+                GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                         Log.d("JSON OBJECT", jsonObject.toString());
@@ -121,6 +121,7 @@ public class FBLogin  extends ActionBarActivity{
                         profilePictureView.setProfileId(uid);
                         fb_user_id = uid;
                         fb_name = name;
+                        new LoginQuery().execute();
                         //new LocationQuery().execute();
                         //Toast t = Toast.makeText(getApplicationContext(), graphResponse.toString(), Toast.LENGTH_LONG );
                         //t.show();
@@ -134,21 +135,21 @@ public class FBLogin  extends ActionBarActivity{
 
             }//END OF ON SUCCESS
 
-                    @Override
-                    public void onCancel() {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Login Cancelled", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
+            @Override
+            public void onCancel() {
+                Toast toast = Toast.makeText(getApplicationContext(), "Login Cancelled", Toast.LENGTH_LONG);
+                toast.show();
+            }
 
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast toast = Toast.makeText(getApplicationContext(), "Error Login", Toast.LENGTH_LONG);
-                        toast.show();
+            @Override
+            public void onError(FacebookException exception) {
+                Toast toast = Toast.makeText(getApplicationContext(), "Error Login", Toast.LENGTH_LONG);
+                toast.show();
 
-                    }
-                }); // end of login stuff
+            }
+        }); // end of login stuff
 
-                new LoginQuery().execute();
+
 
                 // Toast toast = Toast.makeText(getApplicationContext(), "End of onCreate", Toast.LENGTH_LONG);
                 // toast.show();
@@ -213,7 +214,7 @@ public class FBLogin  extends ActionBarActivity{
                     DriverManager.setLoginTimeout(15);
                     conn = DriverManager.getConnection(sqlurl);
                     Statement st = conn.createStatement();
-                    String query = "SELECT * FROM _user_ where id=" + fb_user_id; //actual query
+                    String query = "SELECT * FROM _users_ where id=" + fb_user_id; //actual query
                     ResultSet rs = st.executeQuery(query);
                     Boolean empty = true;
                     while(rs.next()){
@@ -222,14 +223,9 @@ public class FBLogin  extends ActionBarActivity{
                     }
                     //no matches
                     if(empty){
-
+                        Log.d("JakeDebug", "Login Query: empty = true");
                         retr = null;
-                        //new AddUserQuery.execute();
-                        /*
-                        * INSERT INTO _users_ VALUES(fb_user_id, fb_name, ) <- etc.
-                        *
-                        * */
-
+                        new AddUserQuery().execute();
                     }
 
                     rs.close();
@@ -265,13 +261,17 @@ public class FBLogin  extends ActionBarActivity{
 
             Connection conn;
             try{
+                Log.d("JakeDebug", "AddUserQuery: just inside try");
                 DriverManager.setLoginTimeout(15);
                 conn = DriverManager.getConnection(sqlurl);
                 Statement st = conn.createStatement();
-                String query = "INSERT INTO _users_ VALUES (" + _user_id_ + "," + _user_name_ + ");"; //actual query
+                Log.d("JakeDebug", "AddUserQuery: just before query");
+                String query = "INSERT INTO _users_ VALUES(" + fb_user_id + ", '" + fb_name + "');"; //actual query
                 ResultSet rs = st.executeQuery(query);
+                Log.d("JakeDebug", "AddUserQuery: just after query");
                 Boolean empty = true;
                 while(rs.next()){
+                    Log.d("JakeDebug", "Inside while: " + rs.getString("name"));
                     retr = rs.getString("name"); //column data wanted or amount
                     empty = false;
                 }
