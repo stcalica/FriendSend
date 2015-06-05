@@ -49,6 +49,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import android.os.AsyncTask;
 
@@ -56,6 +59,9 @@ public class FBLogin  extends ActionBarActivity{
     public CallbackManager callbackManager;
     LoginButton loginButton;
     JSONObject fbResponse;
+    String fb_user_id;
+    String sqlurl = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
+//    String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
 
     public void PopulateFriends() {
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -109,7 +115,7 @@ public class FBLogin  extends ActionBarActivity{
                         ProfilePictureView profilePictureView;
                         profilePictureView = (ProfilePictureView) findViewById(R.id.propic);
                         profilePictureView.setProfileId(uid);
-                     //   new LoginQuery().execute();
+                        fb_user_id = uid;
                         //new LocationQuery().execute();
                         //Toast t = Toast.makeText(getApplicationContext(), graphResponse.toString(), Toast.LENGTH_LONG );
                         //t.show();
@@ -137,6 +143,7 @@ public class FBLogin  extends ActionBarActivity{
                     }
                 }); // end of login stuff
 
+                //new LoginQuery().execute();
 
                 // Toast toast = Toast.makeText(getApplicationContext(), "End of onCreate", Toast.LENGTH_LONG);
                 // toast.show();
@@ -183,28 +190,105 @@ public class FBLogin  extends ActionBarActivity{
 
             @Override
             protected String doInBackground(Void... voids) {
-                return null;
+
+                String retr = "";
+                try{
+                    Class.forName("org.postgresql.Driver");
+
+                } catch (ClassNotFoundException e){
+
+                    e.printStackTrace();
+                    retr = e.toString();
+                }
+
+               // String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
+                // String url = "jdbc:postgresql://10.0.2.2/dbname?user=username&password=pass";
+                Connection conn;
+                try{
+                    DriverManager.setLoginTimeout(15);
+                    conn = DriverManager.getConnection(sqlurl);
+                    Statement st = conn.createStatement();
+                    String query = "SELECT * FROM _user_ where id=" + fb_user_id; //actual query
+                    ResultSet rs = st.executeQuery(query);
+                    Boolean empty = true;
+                    while(rs.next()){
+                        retr = rs.getString(1); //put column that you want value from
+                        empty = false;
+                    }
+                    //no matches
+                    if(empty){
+
+                        retr = null;
+                        //new AddUserQuery.execute();
+                        /*
+                        * INSERT INTO _users_ VALUES(fb_user_id, fb_name, ) <- etc.
+                        *
+                        * */
+
+                    }
+
+                    rs.close();
+                    st.close();
+
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    retr = e.toString();
+                }
+                return retr;
+
             }
 
             @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
             }
-        }
-        public class LocationQuery extends AsyncTask<Void, Void, String> {
+        }//end of login query
+        public class ParcelQuery extends AsyncTask<Void, Void, String> {
 
             @Override
             protected String doInBackground(Void... voids) {
-                return null;
+                    String retr = "";
+                    try{
+                        Class.forName("org.postgresql.Driver");
+
+                    } catch (ClassNotFoundException e){
+
+                        e.printStackTrace();
+                        retr = e.toString();
+                    }
+
+                    Connection conn;
+                    try{
+                        DriverManager.setLoginTimeout(15);
+                        conn = DriverManager.getConnection(sqlurl);
+                        Statement st = conn.createStatement();
+                        String query = "SELECT * FROM _user_"; //actual query
+                        ResultSet rs = st.executeQuery(query);
+                        Boolean empty = true;
+                        while(rs.next()){
+                            retr = rs.getString("name"); //column data wanted or amount
+                            empty = false;
+                        }
+                        //no matches
+                        if(empty){
+
+                            retr = null;
+                        }
+
+                        rs.close();
+                        st.close();
+
+
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        retr = e.toString();
+                    }
+                    return retr;
+
+                }
             }
 
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-    }
+}
 
 
-
-
-    }
