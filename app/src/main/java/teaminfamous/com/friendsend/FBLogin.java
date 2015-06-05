@@ -60,7 +60,8 @@ public class FBLogin  extends ActionBarActivity{
     LoginButton loginButton;
     JSONObject fbResponse;
     String fb_user_id;
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
+    String fb_name;
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
 //    String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
 
     public void PopulateFriends() {
@@ -107,8 +108,11 @@ public class FBLogin  extends ActionBarActivity{
                     public void onCompleted(JSONObject jsonObject, GraphResponse graphResponse) {
                         Log.d("JSON OBJECT", jsonObject.toString());
                         String uid = "";
+                        String name = "";
                         try {
                             uid = jsonObject.getString("id");
+                            name = jsonObject.getString("first_name");
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -116,6 +120,7 @@ public class FBLogin  extends ActionBarActivity{
                         profilePictureView = (ProfilePictureView) findViewById(R.id.propic);
                         profilePictureView.setProfileId(uid);
                         fb_user_id = uid;
+                        fb_name = name;
                         //new LocationQuery().execute();
                         //Toast t = Toast.makeText(getApplicationContext(), graphResponse.toString(), Toast.LENGTH_LONG );
                         //t.show();
@@ -126,7 +131,7 @@ public class FBLogin  extends ActionBarActivity{
                     }
                 });
                 request.executeAsync();
-                new LoginQuery().execute();
+
             }//END OF ON SUCCESS
 
                     @Override
@@ -143,7 +148,7 @@ public class FBLogin  extends ActionBarActivity{
                     }
                 }); // end of login stuff
 
-                //new LoginQuery().execute();
+                new LoginQuery().execute();
 
                 // Toast toast = Toast.makeText(getApplicationContext(), "End of onCreate", Toast.LENGTH_LONG);
                 // toast.show();
@@ -219,7 +224,7 @@ public class FBLogin  extends ActionBarActivity{
                     if(empty){
 
                         retr = null;
-                        new AddUserQuery.execute();
+                        //new AddUserQuery.execute();
                         /*
                         * INSERT INTO _users_ VALUES(fb_user_id, fb_name, ) <- etc.
                         *
