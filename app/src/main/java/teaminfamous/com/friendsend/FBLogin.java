@@ -60,7 +60,7 @@ public class FBLogin  extends ActionBarActivity{
     LoginButton loginButton;
     JSONObject fbResponse;
     String fb_user_id;
-    String sqlurl = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
 //    String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
 
     public void PopulateFriends() {
@@ -126,7 +126,7 @@ public class FBLogin  extends ActionBarActivity{
                     }
                 });
                 request.executeAsync();
-
+                new LoginQuery().execute();
             }//END OF ON SUCCESS
 
                     @Override
@@ -219,7 +219,7 @@ public class FBLogin  extends ActionBarActivity{
                     if(empty){
 
                         retr = null;
-                        //new AddUserQuery.execute();
+                        new AddUserQuery.execute();
                         /*
                         * INSERT INTO _users_ VALUES(fb_user_id, fb_name, ) <- etc.
                         *
@@ -244,7 +244,53 @@ public class FBLogin  extends ActionBarActivity{
                 super.onPostExecute(s);
             }
         }//end of login query
-        public class ParcelQuery extends AsyncTask<Void, Void, String> {
+    public class AddUserQuery extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String retr = "";
+            try{
+                Class.forName("org.postgresql.Driver");
+
+            } catch (ClassNotFoundException e){
+
+                e.printStackTrace();
+                retr = e.toString();
+            }
+
+            Connection conn;
+            try{
+                DriverManager.setLoginTimeout(15);
+                conn = DriverManager.getConnection(sqlurl);
+                Statement st = conn.createStatement();
+                String query = "INSERT INTO _users_ VALUES (" + _user_id_ + "," + _user_name_ + ");"; //actual query
+                ResultSet rs = st.executeQuery(query);
+                Boolean empty = true;
+                while(rs.next()){
+                    retr = rs.getString("name"); //column data wanted or amount
+                    empty = false;
+                }
+                //no matches
+                if(empty){
+
+                    retr = null;
+                }
+
+                rs.close();
+                st.close();
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                retr = e.toString();
+            }
+            return retr;
+
+        }
+    }//end of add user
+
+
+    public class ParcelQuery extends AsyncTask<Void, Void, String> {
 
             @Override
             protected String doInBackground(Void... voids) {
@@ -289,6 +335,6 @@ public class FBLogin  extends ActionBarActivity{
                 }
             }
 
-}
+}//end of activity
 
 
