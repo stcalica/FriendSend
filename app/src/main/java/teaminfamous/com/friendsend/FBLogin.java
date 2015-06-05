@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -49,27 +50,13 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
+import android.os.AsyncTask;
 
 public class FBLogin  extends ActionBarActivity{
     public CallbackManager callbackManager;
     LoginButton loginButton;
     JSONObject fbResponse;
-/*    String dburl = "jdbc:postgresql://localhost/friendsend" +
-            "?sslfactory=org.postgresql.ssl.NonValidatingFactory" +
-            "&ssl=true";
-    Connection conn = DriverManager.getConnection(dburl,
-            "kyle",
-            "barry1");
 
-*/
-    public void createUser(){
-        User newUser;
-
-
-
-
-
-    }
     public void PopulateFriends() {
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
             @Override
@@ -122,12 +109,14 @@ public class FBLogin  extends ActionBarActivity{
                         ProfilePictureView profilePictureView;
                         profilePictureView = (ProfilePictureView) findViewById(R.id.propic);
                         profilePictureView.setProfileId(uid);
-                        Toast t = Toast.makeText(getApplicationContext(), graphResponse.toString(), Toast.LENGTH_LONG );
-                        t.show();
-                       // createUser(uid);
-                       //  Toast t = Toast.makeText(getApplicationContext(), JSONObject responseJSON = new JSONObject(jsonObject);
+                     //   new LoginQuery().execute();
+                        //new LocationQuery().execute();
+                        //Toast t = Toast.makeText(getApplicationContext(), graphResponse.toString(), Toast.LENGTH_LONG );
+                        //t.show();
+                        //createUser(uid);
+                        //Toast t = Toast.makeText(getApplicationContext(), JSONObject responseJSON = new JSONObject(jsonObject);
                         // graph response just has jsonObject and Status Code connected to itaphResponse.toString(), Toast.LENGTH_LONG);
-                         t.show();
+                        // t.show();
                     }
                 });
                 request.executeAsync();
@@ -188,4 +177,34 @@ public class FBLogin  extends ActionBarActivity{
                 Toast toast = Toast.makeText(getApplicationContext(), "Facebook Logout", Toast.LENGTH_LONG);
                 super.onDestroy();
             }
+
+
+        public class LoginQuery extends AsyncTask<Void, Void, String> {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+            }
+        }
+        public class LocationQuery extends AsyncTask<Void, Void, String> {
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+            }
+    }
+
+
+
+
     }
