@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import java.sql.Connection;
@@ -29,7 +30,7 @@ public class makeRequestDetails extends ActionBarActivity {
     public  EditText pkg_descrip;
     public EditText pkg_trust;
 
-    public void SubmitRequest(){
+    public void SubmitRequest(View view){
         package_name  = pkg_name.getText().toString();
         date_for_delivery = pkg_date.getText().toString();
         package_description = pkg_descrip.getText().toString();
