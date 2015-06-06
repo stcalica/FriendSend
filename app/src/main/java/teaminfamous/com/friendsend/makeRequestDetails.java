@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,19 +16,36 @@ import java.sql.Statement;
 
 public class makeRequestDetails extends ActionBarActivity {
 
-    private int package_id; // the package id
+    //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
     private int sender_id; // the user_id of the package sender
-    private int receiver_id; // the user_id of the package receiver
+  //  private int receiver_id; // the user_id of the package receiver
     private String date_for_delivery; // the date for the package to be delivered.
     private int package_trust_level; // the level of trust for the package
     private String package_description; // the package description
 
+    public  EditText pkg_name;
+    public EditText pkg_date;
+    public  EditText pkg_descrip;
+    public EditText pkg_trust;
+
+    public void SubmitRequest(){
+        package_name  = pkg_name.getText().toString();
+        date_for_delivery = pkg_date.getText().toString();
+        package_description = pkg_descrip.getText().toString();
+        package_trust_level = Integer.parseInt(pkg_trust.getText().toString());
+        new AddPackageQuery().execute();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_request_details);
+        pkg_name = (EditText) findViewById(R.id.editName);
+        pkg_date = (EditText) findViewById(R.id.editDate);
+        pkg_descrip = (EditText) findViewById(R.id.editDescrip);
+        pkg_trust = (EditText) findViewById(R.id.editTrust);
+
 
     }
 
