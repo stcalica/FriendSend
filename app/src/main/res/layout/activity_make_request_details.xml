@@ -6,29 +6,58 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="teaminfamous.com.friendsend.makeRequestDetails"
     android:orientation="vertical"
-    android:background="#009999">
+    android:background="#009999"
+    android:name=".makeRequestDetails"
+    android:label="Make Delivery Request">
     <EditText
+        android:id="@+id/editName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="Package Name"/>
     <EditText
+        android:id="@+id/reciever"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:hint="From"/>
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:text="Trust Level"
-        android:layout_gravity="center"
-        android:textAlignment="center"/>
 
-    <SeekBar
+    <EditText
+        android:hint="Trust Level"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#1D7373"
-       />
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTrust"
+        />
+
+    <EditText
+        android:hint="00/00/00"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/editDate" />
+
+    <EditText
+        android:hint="00:00AM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/editTime"
+        />
+
+    <EditText
+        android:inputType="textMultiLine"
+        android:lines="40"
+        android:hint="Write A Breif Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editDescrip"
+        android:background="#FFFFFF"
+        android:scrollbars="vertical"
+        />
 
 
 </LinearLayout>
