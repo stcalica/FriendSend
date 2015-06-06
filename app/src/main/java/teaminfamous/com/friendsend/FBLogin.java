@@ -86,7 +86,7 @@ public class FBLogin  extends ActionBarActivity{
         Toast toast = Toast.makeText(getApplicationContext(), "Button Clicked!", Toast.LENGTH_LONG);
         toast.show();
         Intent intent = new Intent(FBLogin.this, makeRequestDetails.class);
-        //intent.putExtra();
+        intent.putExtra("user_id", fb_user_id);
         startActivity(intent);
     } //END OF PKG REQUEST INTENT/LISTENER
 

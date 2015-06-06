@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class makeRequestDetails extends ActionBarActivity {
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
     //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
     private int sender_id; // the user_id of the package sender
@@ -31,10 +31,10 @@ public class makeRequestDetails extends ActionBarActivity {
     public EditText pkg_trust;
 
     public void SubmitRequest(View view){
-        //package_name  = pkg_name.getText().toString();
-        //date_for_delivery = pkg_date.getText().toString();
-        //package_description = pkg_descrip.getText().toString();
-        //package_trust_level = Integer.parseInt(pkg_trust.getText().toString());
+        package_name  = pkg_name.getText().toString();
+        date_for_delivery = pkg_date.getText().toString();
+        package_description = pkg_descrip.getText().toString();
+        package_trust_level = Integer.parseInt(pkg_trust.getText().toString());
         new AddPackageQuery().execute();
     }
 
