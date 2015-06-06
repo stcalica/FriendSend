@@ -61,7 +61,7 @@ public class FBLogin  extends ActionBarActivity{
     JSONObject fbResponse;
     String fb_user_id;
     String fb_name;
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
 //    String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
 
     public void PopulateFriends() {
@@ -86,7 +86,7 @@ public class FBLogin  extends ActionBarActivity{
         Toast toast = Toast.makeText(getApplicationContext(), "Button Clicked!", Toast.LENGTH_LONG);
         toast.show();
         Intent intent = new Intent(FBLogin.this, makeRequestDetails.class);
-        intent.putExtra();
+        //intent.putExtra();
         startActivity(intent);
     } //END OF PKG REQUEST INTENT/LISTENER
 
