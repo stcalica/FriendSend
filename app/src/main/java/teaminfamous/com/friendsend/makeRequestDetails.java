@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class makeRequestDetails extends ActionBarActivity {
-
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
     //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
     private int sender_id; // the user_id of the package sender
