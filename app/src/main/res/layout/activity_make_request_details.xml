@@ -50,7 +50,7 @@
 
     <EditText
         android:inputType="textMultiLine"
-        android:lines="40"
+        android:lines="10"
         android:hint="Write A Breif Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,6 +58,14 @@
         android:background="#FFFFFF"
         android:scrollbars="vertical"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Submit Request"
+        android:onClick="SubmitRequest"
+        android:id="@+id/submit"/>
+    
 
 
 </LinearLayout>
