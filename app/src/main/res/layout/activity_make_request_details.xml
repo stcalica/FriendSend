@@ -51,6 +51,7 @@
     <EditText
         android:inputType="textMultiLine"
         android:lines="8"
+        android:gravity="top|left"
         android:hint="Write A Breif Description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
