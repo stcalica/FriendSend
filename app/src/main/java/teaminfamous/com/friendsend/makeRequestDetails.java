@@ -46,6 +46,7 @@ public class makeRequestDetails extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_make_request_details);
         pkg_name = (EditText) findViewById(R.id.editName);
         pkg_date = (EditText) findViewById(R.id.editDate);

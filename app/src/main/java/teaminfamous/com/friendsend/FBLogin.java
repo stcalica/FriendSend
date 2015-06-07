@@ -81,6 +81,13 @@ public class FBLogin  extends ActionBarActivity{
         });
     }//END OF POPULATE FRIENDS
 
+    public void trackPackage(View view){
+        Toast t = Toast.makeText(getApplicationContext(), "Tracking Packages...", Toast.LENGTH_LONG);
+        t.show();
+        Intent i = new Intent(FBLogin.this, TrackPackage.class);
+        i.putExtra("user_id", fb_user_id);
+        startActivity(i);
+    } //END OF PKG Track INTENT/LISTENER
 
     public void makePackageRequest(View view){
         Toast toast = Toast.makeText(getApplicationContext(), "Button Clicked!", Toast.LENGTH_LONG);

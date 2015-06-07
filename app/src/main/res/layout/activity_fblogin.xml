@@ -52,7 +52,9 @@
             android:layout_gravity="right"
             android:background="#9FEE00"
             android:padding="9dp"
-            android:layout_margin="3dp"/>
+            android:layout_margin="3dp"
+            android:onClick="trackPackage"
+            />
     </LinearLayout>
 
 
@@ -64,9 +66,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="271dp"
-        android:layout_gravity="right|center_vertical"></ListView>
 
 </FrameLayout>
