@@ -1,6 +1,7 @@
 package teaminfamous.com.friendsend;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,6 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,8 +22,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class makeRequestDetails extends ActionBarActivity {
+public class makeRequestDetails extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
+    GoogleApiClient mGoogleApiClient;
+    Location origin;
     //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
     private int sender_id; // the user_id of the package sender
@@ -46,7 +54,11 @@ public class makeRequestDetails extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
         setContentView(R.layout.activity_make_request_details);
         pkg_name = (EditText) findViewById(R.id.editName);
         pkg_date = (EditText) findViewById(R.id.editDate);
@@ -79,6 +91,23 @@ public class makeRequestDetails extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     } // onOptionsItemSelected(MenuItem item)
+
+    @Override
+    public void onConnected(Bundle bundle) {
+       origin = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast t = Toast.makeText(getApplicationContext(),"Connection Failed To Get Location", Toast.LENGTH_LONG);
+        t.show();
+    }
 
     public class AddPackageQuery extends AsyncTask<Void, Void, Void> {
 
