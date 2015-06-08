@@ -2,6 +2,7 @@ package teaminfamous.com.friendsend;
 
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.sql.Connection;
@@ -26,8 +29,8 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
     String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
     GoogleApiClient mGoogleApiClient;
     Location origin;
-    double lon;
-    double lat;
+    double lon = 38.5539; // test locations
+    double lat = 121.7381;
     //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
     private int sender_id; // the user_id of the package sender
@@ -64,8 +67,7 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
                 .addApi(LocationServices.API)
                 .build();
         setContentView(R.layout.activity_make_request_details);
-        origin = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+
         pkg_name = (EditText) findViewById(R.id.editName);
         pkg_date = (EditText) findViewById(R.id.editDate);
         pkg_descrip = (EditText) findViewById(R.id.editDescrip);
@@ -105,14 +107,20 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
         return super.onOptionsItemSelected(item);
     } // onOptionsItemSelected(MenuItem item)
 
+   /* @Override
+    public void onLocationChanged(final Location location) {
+        origin = location;
+    }*/
+
     @Override
     public void onConnected(Bundle bundle) {
-        origin = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+
+        origin = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (origin != null){
             lon =origin.getLatitude();
             lat = origin.getLongitude();
         }
+
         Toast t = Toast.makeText(getApplicationContext(),"Connected To Get Location", Toast.LENGTH_LONG);
         t.show();
     }
@@ -146,6 +154,9 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
                 conn = DriverManager.getConnection(sqlurl);
                 Statement st = conn.createStatement();
                 Log.d("JakeDebug", "AddPackageQuery: just before query");
+                Log.d("JakeDebug", "AddPackageQuery: long = \"" + lon + "\"");
+                Log.d("JakeDebug", "AddPackageQuery: lat = \"" + lat + "\"");
+
                 //String query = "INSERT INTO _parcels_ (name, sender, deliv_date, trust_level, description) VALUES('Drugs', 10001, '9/11/2001', 666, 'Not suspicious');";
                 String query = "INSERT INTO _parcels_ (name, sender, deliv_date, trust_level, description, long, lat) VALUES('" + package_name + "', " + sender_id + ", '" +
                         date_for_delivery + "', " + package_trust_level + ", '" + package_description +  "', "+ lon  + ", " + lat + ");"; //actual query
