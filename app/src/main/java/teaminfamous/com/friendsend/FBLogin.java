@@ -33,9 +33,12 @@ import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
 import android.content.pm.Signature;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -52,16 +55,21 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Properties;
 import android.os.AsyncTask;
 
-public class FBLogin  extends ActionBarActivity{
+public class FBLogin  extends ActionBarActivity {
     public CallbackManager callbackManager;
     LoginButton loginButton;
     JSONObject fbResponse;
     String fb_user_id;
     String fb_name;
     String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
+    ArrayList<parcels> pkgs = new ArrayList<parcels>();//add pkgs that belong to the user here!
+
+
+    //https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
 //    String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
 
     public void PopulateFriends() {
@@ -81,7 +89,7 @@ public class FBLogin  extends ActionBarActivity{
         });
     }//END OF POPULATE FRIENDS
 
-    public void trackPackage(View view){
+    public void trackPackage(View view) {
         Toast t = Toast.makeText(getApplicationContext(), "Tracking Packages...", Toast.LENGTH_LONG);
         t.show();
         Intent i = new Intent(FBLogin.this, TrackPackage.class);
@@ -89,7 +97,7 @@ public class FBLogin  extends ActionBarActivity{
         startActivity(i);
     } //END OF PKG Track INTENT/LISTENER
 
-    public void makePackageRequest(View view){
+    public void makePackageRequest(View view) {
         Toast toast = Toast.makeText(getApplicationContext(), "Button Clicked!", Toast.LENGTH_LONG);
         toast.show();
         Intent intent = new Intent(FBLogin.this, makeRequestDetails.class);
@@ -157,118 +165,120 @@ public class FBLogin  extends ActionBarActivity{
             }
         }); // end of login stuff
 
+        //new PkgsQuery().execute();
+        ListView parcels = (ListView) findViewById(R.id.knapsack);
+        ArrayAdapter<parcels> parcelAdapter = new ArrayAdapter<parcels>(this, R.layout.parcelitem, R.id.knapsack);
+        parcels.setAdapter(parcelAdapter);
 
 
-                // Toast toast = Toast.makeText(getApplicationContext(), "End of onCreate", Toast.LENGTH_LONG);
-                // toast.show();
+    } //END OF ON CREATE
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_fblogin, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        LoginManager.getInstance().logOut();
+        Toast toast = Toast.makeText(getApplicationContext(), "Facebook Logout", Toast.LENGTH_LONG);
+        super.onDestroy();
+    }
 
 
-            } //END OF ON CREATE
-            @Override
-            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                super.onActivityResult(requestCode, resultCode, data);
-                callbackManager.onActivityResult(requestCode, resultCode, data);
+    public class LoginQuery extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            String retr = "";
+            try {
+                Class.forName("org.postgresql.Driver");
+
+            } catch (ClassNotFoundException e) {
+
+                e.printStackTrace();
+                retr = e.toString();
             }
 
-            @Override
-            public boolean onCreateOptionsMenu(Menu menu) {
-                // Inflate the menu; this adds items to the action bar if it is present.
-                getMenuInflater().inflate(R.menu.menu_fblogin, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onOptionsItemSelected(MenuItem item) {
-                // Handle action bar item clicks here. The action bar will
-                // automatically handle clicks on the Home/Up button, so long
-                // as you specify a parent activity in AndroidManifest.xml.
-                int id = item.getItemId();
-
-                //noinspection SimplifiableIfStatement
-                if (id == R.id.action_settings) {
-                    return true;
+            // String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
+            // String url = "jdbc:postgresql://10.0.2.2/dbname?user=username&password=pass";
+            Connection conn;
+            try {
+                DriverManager.setLoginTimeout(15);
+                conn = DriverManager.getConnection(sqlurl);
+                Statement st = conn.createStatement();
+                String query = "SELECT * FROM _users_ where id=" + fb_user_id; //actual query
+                ResultSet rs = st.executeQuery(query);
+                Boolean empty = true;
+                while (rs.next()) {
+                    retr = rs.getString(1); //put column that you want value from
+                    empty = false;
+                }
+                //no matches
+                if (empty) {
+                    Log.d("JakeDebug", "Login Query: empty = true");
+                    retr = null;
+                    new AddUserQuery().execute();
                 }
 
-                return super.onOptionsItemSelected(item);
+                rs.close();
+                st.close();
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                retr = e.toString();
             }
+            return retr;
 
-            @Override
-            protected void onDestroy() {
-                LoginManager.getInstance().logOut();
-                Toast toast = Toast.makeText(getApplicationContext(), "Facebook Logout", Toast.LENGTH_LONG);
-                super.onDestroy();
-            }
+        }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }//end of login query
 
-        public class LoginQuery extends AsyncTask<Void, Void, String> {
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-                String retr = "";
-                try{
-                    Class.forName("org.postgresql.Driver");
-
-                } catch (ClassNotFoundException e){
-
-                    e.printStackTrace();
-                    retr = e.toString();
-                }
-
-               // String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
-                // String url = "jdbc:postgresql://10.0.2.2/dbname?user=username&password=pass";
-                Connection conn;
-                try{
-                    DriverManager.setLoginTimeout(15);
-                    conn = DriverManager.getConnection(sqlurl);
-                    Statement st = conn.createStatement();
-                    String query = "SELECT * FROM _users_ where id=" + fb_user_id; //actual query
-                    ResultSet rs = st.executeQuery(query);
-                    Boolean empty = true;
-                    while(rs.next()){
-                        retr = rs.getString(1); //put column that you want value from
-                        empty = false;
-                    }
-                    //no matches
-                    if(empty){
-                        Log.d("JakeDebug", "Login Query: empty = true");
-                        retr = null;
-                        new AddUserQuery().execute();
-                    }
-
-                    rs.close();
-                    st.close();
-
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    retr = e.toString();
-                }
-                return retr;
-
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-            }
-        }//end of login query
     public class AddUserQuery extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
             String retr = "";
-            try{
+            try {
                 Class.forName("org.postgresql.Driver");
 
-            } catch (ClassNotFoundException e){
+            } catch (ClassNotFoundException e) {
 
                 e.printStackTrace();
                 retr = e.toString();
             }
 
             Connection conn;
-            try{
+            try {
                 Log.d("JakeDebug", "AddUserQuery: just inside try");
                 DriverManager.setLoginTimeout(15);
                 conn = DriverManager.getConnection(sqlurl);
@@ -278,13 +288,13 @@ public class FBLogin  extends ActionBarActivity{
                 ResultSet rs = st.executeQuery(query);
                 Log.d("JakeDebug", "AddUserQuery: just after query");
                 Boolean empty = true;
-                while(rs.next()){
+                while (rs.next()) {
                     Log.d("JakeDebug", "Inside while: " + rs.getString("name"));
                     retr = rs.getString("name"); //column data wanted or amount
                     empty = false;
                 }
                 //no matches
-                if(empty){
+                if (empty) {
 
                     retr = null;
                 }
@@ -303,50 +313,54 @@ public class FBLogin  extends ActionBarActivity{
     }//end of add user
 
 
-    public class ParcelQuery extends AsyncTask<Void, Void, String> {
+    public class PkgsQuery extends AsyncTask<Void, Void, Void> {
 
-            @Override
-            protected String doInBackground(Void... voids) {
-                    String retr = "";
-                    try{
-                        Class.forName("org.postgresql.Driver");
+        @Override
+        protected Void doInBackground(Void... voids) {
 
-                    } catch (ClassNotFoundException e){
+            try {
+                Class.forName("org.postgresql.Driver");
 
-                        e.printStackTrace();
-                        retr = e.toString();
-                    }
+            } catch (ClassNotFoundException e) {
 
-                    Connection conn;
-                    try{
-                        DriverManager.setLoginTimeout(15);
-                        conn = DriverManager.getConnection(sqlurl);
-                        Statement st = conn.createStatement();
-                        String query = "SELECT * FROM _user_"; //actual query
-                        ResultSet rs = st.executeQuery(query);
-                        Boolean empty = true;
-                        while(rs.next()){
-                            retr = rs.getString("name"); //column data wanted or amount
-                            empty = false;
-                        }
-                        //no matches
-                        if(empty){
+                e.printStackTrace();
+            }
 
-                            retr = null;
-                        }
-
-                        rs.close();
-                        st.close();
-
-
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                        retr = e.toString();
-                    }
-                    return retr;
+            // String url = "jdbc:postgresql://10.0.2.2/test?user=postgres&password=barry1";
+            // String url = "jdbc:postgresql://10.0.2.2/dbname?user=username&password=pass";
+            Connection conn;
+            try {
+                DriverManager.setLoginTimeout(15);
+                conn = DriverManager.getConnection(sqlurl);
+                Statement st = conn.createStatement();
+                String query = "SELECT * FROM _parcels_ where sender=" + fb_user_id; //actual query
+                ResultSet rs = st.executeQuery(query);
+                Boolean empty = true;
+                while (rs.next()) {
+                    empty = false;
+                    parcels tmp = new parcels();
+                    tmp.name = rs.getString("name");
+                    pkgs.add(tmp);
 
                 }
+                //no matches
+                if (empty) {
+                    Log.d("JakeDebug", "Login Query: empty = true");
+                }
+
+                rs.close();
+                st.close();
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+            return null;
+        }
+
+
+    }//end of pkgs query
+
 
 }//end of activity
 
