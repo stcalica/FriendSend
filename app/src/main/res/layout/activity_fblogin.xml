@@ -56,6 +56,12 @@
             android:onClick="trackPackage"
             />
     </LinearLayout>
+    <ListView
+        android:id="@+id/knapsack"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="95dp"></ListView>
 
 
     <com.facebook.login.widget.LoginButton

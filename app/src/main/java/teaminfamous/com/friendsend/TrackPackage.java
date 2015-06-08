@@ -153,8 +153,6 @@ public class TrackPackage extends FragmentActivity {
 
             } else{
                 Log.d("JakeDebug", " mPoints is null");
-
-
             }
 
         }

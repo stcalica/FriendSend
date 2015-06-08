@@ -41,10 +41,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".makeRequestEta"
-            android:label="@string/title_activity_make_request" >
-        </activity>
-        <activity
             android:name=".makeRequestDetails"
             android:label="Make Delivery Request" >
         </activity>
