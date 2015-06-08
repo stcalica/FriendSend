@@ -7,6 +7,5 @@ public class User {
 
     public String name;
     public Integer trust;
-    public Knapsack knapsack;
 }
 
