@@ -23,9 +23,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class makeRequestDetails extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
     GoogleApiClient mGoogleApiClient;
     Location origin;
+    double lon;
+    double lat;
     //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
     private int sender_id; // the user_id of the package sender
@@ -49,6 +51,8 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
             package_trust_level = Integer.parseInt(pkg_trust.getText().toString());
         }
         new AddPackageQuery().execute();
+        Intent intent = new Intent(makeRequestDetails.this, makeRequestDetails.class);//change to next portion
+        startActivity(intent);
     }
 
     @Override
@@ -60,11 +64,20 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
                 .addApi(LocationServices.API)
                 .build();
         setContentView(R.layout.activity_make_request_details);
+        origin = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
         pkg_name = (EditText) findViewById(R.id.editName);
         pkg_date = (EditText) findViewById(R.id.editDate);
         pkg_descrip = (EditText) findViewById(R.id.editDescrip);
         pkg_trust = (EditText) findViewById(R.id.editTrust);
 
+
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        mGoogleApiClient.connect();
 
     }
 
@@ -94,9 +107,16 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
 
     @Override
     public void onConnected(Bundle bundle) {
-       origin = LocationServices.FusedLocationApi.getLastLocation(
+        origin = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+        if (origin != null){
+            lon =origin.getLatitude();
+            lat = origin.getLongitude();
+        }
+        Toast t = Toast.makeText(getApplicationContext(),"Connected To Get Location", Toast.LENGTH_LONG);
+        t.show();
     }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -126,10 +146,9 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
                 conn = DriverManager.getConnection(sqlurl);
                 Statement st = conn.createStatement();
                 Log.d("JakeDebug", "AddPackageQuery: just before query");
-
                 //String query = "INSERT INTO _parcels_ (name, sender, deliv_date, trust_level, description) VALUES('Drugs', 10001, '9/11/2001', 666, 'Not suspicious');";
-                String query = "INSERT INTO _parcels_ (name, sender, deliv_date, trust_level, description) VALUES('" + package_name + "', " + sender_id + ", '" +
-                        date_for_delivery + "', " + package_trust_level + ", '" + package_description + "');"; //actual query
+                String query = "INSERT INTO _parcels_ (name, sender, deliv_date, trust_level, description, long, lat) VALUES('" + package_name + "', " + sender_id + ", '" +
+                        date_for_delivery + "', " + package_trust_level + ", '" + package_description +  "', "+ lon  + ", " + lat + ");"; //actual query
                 Log.d("JakeDebug", "AddPackageQuery: query = \"" + query + "\"");
                 st.executeQuery(query);
                 Log.d("JakeDebug", "AddUserQuery: just after query");
