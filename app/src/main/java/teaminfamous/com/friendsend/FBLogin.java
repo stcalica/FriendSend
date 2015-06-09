@@ -65,8 +65,8 @@ public class FBLogin  extends ActionBarActivity {
     JSONObject fbResponse;
     String fb_user_id;
     String fb_name;
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
-    ArrayList<parcels> pkgs = new ArrayList<parcels>();//add pkgs that belong to the user here!
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    ArrayList<String> pkgs = new ArrayList<String>();//add pkgs that belong to the user here!
 
 
     //https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
@@ -165,9 +165,9 @@ public class FBLogin  extends ActionBarActivity {
             }
         }); // end of login stuff
 
-        //new PkgsQuery().execute();
+        new PkgsQuery().execute();
         ListView parcels = (ListView) findViewById(R.id.knapsack);
-        ArrayAdapter<parcels> parcelAdapter = new ArrayAdapter<parcels>(this, R.layout.parcelitem, R.id.knapsack);
+        ArrayAdapter<String> parcelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, pkgs);
         parcels.setAdapter(parcelAdapter);
 
 
@@ -333,19 +333,20 @@ public class FBLogin  extends ActionBarActivity {
                 DriverManager.setLoginTimeout(15);
                 conn = DriverManager.getConnection(sqlurl);
                 Statement st = conn.createStatement();
-                String query = "SELECT * FROM _parcels_ where sender=" + fb_user_id; //actual query
+                String query = "SELECT * FROM _parcels_ ;"; //where sender=" + fb_user_id; //actual query
                 ResultSet rs = st.executeQuery(query);
                 Boolean empty = true;
                 while (rs.next()) {
                     empty = false;
-                    parcels tmp = new parcels();
-                    tmp.name = rs.getString("name");
+                    String tmp;
+                    tmp = rs.getString("name");
                     pkgs.add(tmp);
+                    Log.d("JakeDebug", "Pkgs Query: " + tmp);
 
                 }
                 //no matches
                 if (empty) {
-                    Log.d("JakeDebug", "Login Query: empty = true");
+                    Log.d("JakeDebug", "Pkgs Query: empty = true");
                 }
 
                 rs.close();
