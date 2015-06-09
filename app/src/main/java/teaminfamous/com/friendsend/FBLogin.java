@@ -41,6 +41,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -128,6 +129,7 @@ public class FBLogin  extends ActionBarActivity {
                         try {
                             uid = jsonObject.getString("id");
                             name = jsonObject.getString("first_name");
+                            //friends = jsonObject.get
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -148,8 +150,16 @@ public class FBLogin  extends ActionBarActivity {
                     }
                 });
                 request.executeAsync();
+                GraphRequest friendRequest = GraphRequest.newMyFriendsRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONArrayCallback(){
+                    @Override
+                    public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
+                        Log.d("Json", jsonArray.toString());
+                    }
+                });
+                friendRequest.executeAsync();
 
-            }//END OF ON SUCCESS
+
+                }//END OF ON SUCCESS
 
             @Override
             public void onCancel() {
