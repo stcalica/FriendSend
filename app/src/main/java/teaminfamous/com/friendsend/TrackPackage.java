@@ -107,7 +107,7 @@ public class TrackPackage extends FragmentActivity {
                 Statement st = conn.createStatement();
                 Log.d("JakeDebug", "AddPackageQuery: just before query");
                 //String query = "SELECT name, long, lat FROM _parcels_ where id = "+  +";";
-                String query = "SELECT name, long, lat FROM _parcels_ where id=" + uid; //actual query
+                String query = "SELECT name, long, lat FROM _parcels_;"; // where id=" + uid; //actual query
                 Log.d("JakeDebug", "AddPackageQuery: query = \"" + query + "\"");
                 ResultSet rs = st.executeQuery(query);
                 while(rs.next()){
@@ -145,10 +145,9 @@ public class TrackPackage extends FragmentActivity {
                 for(int i=0; i < mPoints.size(); i++){
                     parcels tmp = mPoints.get(i);
                     Log.d("JakeDebug", "marker at " + tmp.longitude +","+ tmp.latitude);
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(tmp.longitude, -(tmp.latitude))).title(tmp.name).visible(true));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(tmp.longitude, -(tmp.latitude)), 13));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(tmp.longitude, -(tmp.latitude+(0.001*i)))).title(tmp.name).visible(true));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(tmp.longitude, -(tmp.latitude)+(0.001*i)), 13));
                     Log.d("JakeDebug", "Adding marker");
-
                 }
 
             } else{

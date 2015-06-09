@@ -34,6 +34,7 @@ import com.facebook.login.widget.ProfilePictureView;
 
 import android.content.pm.Signature;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -180,6 +181,15 @@ public class FBLogin  extends ActionBarActivity {
         ListView parcels = (ListView) findViewById(R.id.knapsack);
         ArrayAdapter<String> parcelAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, pkgs);
         parcels.setAdapter(parcelAdapter);
+        parcels.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent pkg_intent = new Intent(FBLogin.this, Package.class);
+                pkg_intent.putExtra("pkg_id", i);
+                startActivity(pkg_intent);
+
+            }
+        });
 
 
     } //END OF ON CREATE

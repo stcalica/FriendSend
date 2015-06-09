@@ -10,5 +10,6 @@
     <string name="make_request_title">Choose Your Options</string>
     <string name="title_activity_make_request_details">makeRequestDetails</string>
     <string name="title_activity_track_package">Map</string>
+    <string name="title_activity_package">Package</string>
 
 </resources>
