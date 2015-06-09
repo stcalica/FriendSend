@@ -85,8 +85,6 @@ public class FBLogin  extends ActionBarActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }
         });
     }//END OF POPULATE FRIENDS

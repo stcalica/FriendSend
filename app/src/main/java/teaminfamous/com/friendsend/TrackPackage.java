@@ -11,7 +11,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Connection;
@@ -22,10 +21,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TrackPackage extends FragmentActivity {
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     public Location markers[];
-    int uid = 1; //once we get it ignore it
+    String user_id; //once we get it ignore it
 
     ArrayList<parcels> mPoints = new ArrayList<parcels> ();
 
@@ -38,8 +37,6 @@ public class TrackPackage extends FragmentActivity {
         //get user id
         //all packages from datatbase
         new GetPackagesQuery().execute();
-
-
     }
 
     @Override
@@ -105,16 +102,19 @@ public class TrackPackage extends FragmentActivity {
                 DriverManager.setLoginTimeout(15);
                 conn = DriverManager.getConnection(sqlurl);
                 Statement st = conn.createStatement();
-                Log.d("JakeDebug", "AddPackageQuery: just before query");
-                //String query = "SELECT name, long, lat FROM _parcels_ where id = "+  +";";
-                String query = "SELECT name, long, lat FROM _parcels_;"; // where id=" + uid; //actual query
-                Log.d("JakeDebug", "AddPackageQuery: query = \"" + query + "\"");
+                Bundle extras = getIntent().getExtras();
+                user_id = extras.getString("user_id");
+                Log.d("JakeDebug", "GetPackagesQuery: User ID loaded: " + user_id);
+                String query = "SELECT name, long, lat FROM _parcels_ where id=" + user_id; //actual query
+                Log.d("JakeDebug", "GetPackagesQuery: query = \"" + query + "\"");
                 ResultSet rs = st.executeQuery(query);
                 while(rs.next()){
+
                     double longitude =  rs.getDouble("long");
                     double latitude = rs.getDouble("lat");
                     String name = rs.getString("name");
                     parcels temp = new parcels();
+                    Log.d("JakeDebug", "GetPackagesQuery -> Parcel Name: " + name);
                     temp.name = name;
                     temp.longitude = longitude;
                     temp.latitude = latitude;

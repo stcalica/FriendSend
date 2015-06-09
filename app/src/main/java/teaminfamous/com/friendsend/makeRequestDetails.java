@@ -58,7 +58,7 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
         }
         new AddPackageQuery().execute();
         Intent intent = new Intent(makeRequestDetails.this, makeRequestDetails.class);//change to next portion
-        //intent.putExtra("u_id");
+        intent.putExtra("user_id", sender_id);
         startActivity(intent);
     }
 
