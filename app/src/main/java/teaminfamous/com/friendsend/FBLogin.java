@@ -67,7 +67,7 @@ public class FBLogin  extends ActionBarActivity {
     JSONObject fbResponse;
     String fb_user_id;
     String fb_name;
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
     ArrayList<String> pkgs = new ArrayList<String>();//add pkgs that belong to the user here!
 
 
@@ -141,13 +141,6 @@ public class FBLogin  extends ActionBarActivity {
                         fb_user_id = uid;
                         fb_name = name;
                         new LoginQuery().execute();
-                        //new LocationQuery().execute();
-                        //Toast t = Toast.makeText(getApplicationContext(), graphResponse.toString(), Toast.LENGTH_LONG );
-                        //t.show();
-                        //createUser(uid);
-                        //Toast t = Toast.makeText(getApplicationContext(), JSONObject responseJSON = new JSONObject(jsonObject);
-                        // graph response just has jsonObject and Status Code connected to itaphResponse.toString(), Toast.LENGTH_LONG);
-                        // t.show();
                     }
                 });
                 request.executeAsync();

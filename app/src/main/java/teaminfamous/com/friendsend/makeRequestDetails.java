@@ -26,14 +26,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class makeRequestDetails extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
     GoogleApiClient mGoogleApiClient;
     Location origin;
     double lon = 38.5539; // test locations
     double lat = 121.7381;
     //private int package_id; // the package id
     private String package_name; // the name of the package to be sent
-    private int sender_id; // the user_id of the package sender
+    private String sender_id; // the user_id of the package sender
     private String date_for_delivery; // the date for the package to be delivered.
     private int package_trust_level; // the level of trust for the package
     private String package_description; // the package description
@@ -47,6 +47,9 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
         package_name  = pkg_name.getText().toString();
         date_for_delivery = pkg_date.getText().toString();
         package_description = pkg_descrip.getText().toString();
+        Bundle extras = getIntent().getExtras();
+        sender_id = extras.getString("user_id");
+        Log.d("JakeDebug", "User ID loaded: " + sender_id);
         if(pkg_trust.getText().toString().length() == 0) {
             package_trust_level = 0;
         }
@@ -55,6 +58,7 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
         }
         new AddPackageQuery().execute();
         Intent intent = new Intent(makeRequestDetails.this, makeRequestDetails.class);//change to next portion
+        //intent.putExtra("u_id");
         startActivity(intent);
     }
 
@@ -73,7 +77,6 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
         pkg_descrip = (EditText) findViewById(R.id.editDescrip);
         pkg_trust = (EditText) findViewById(R.id.editTrust);
 
-
     }
 
     @Override
@@ -88,7 +91,7 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_make_request_details, menu);
         Intent intent = getIntent();
-        sender_id = intent.getIntExtra("user_id", 0);
+        //sender_id = intent.getExtra("user_id");
         return true;
     }
 
@@ -138,7 +141,6 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
     }
 
     public class AddPackageQuery extends AsyncTask<Void, Void, Void> {
-
         @Override
         protected Void doInBackground(Void... voids) {
             try{
@@ -169,7 +171,6 @@ public class makeRequestDetails extends ActionBarActivity implements GoogleApiCl
                 e.printStackTrace();
             }
             return null;
-
         }
     }//end of add user
 
