@@ -26,7 +26,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class makeRequestDetails extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=Batman4738473";
+    String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
     GoogleApiClient mGoogleApiClient;
     Location origin;
     double lon = 38.5539; // test locations

@@ -15,11 +15,15 @@ import java.sql.Statement;
 
 public class Package extends ActionBarActivity {
     String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_package);
+        Bundle extra = getIntent().getExtras();
+        id = extra.getInt("i");
+        new GetPackage().execute();
     }
 
     @Override
@@ -44,7 +48,7 @@ public class Package extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public class PkgsQuery extends AsyncTask<Void, Void, Void> {
+    public class GetPackage extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -64,7 +68,7 @@ public class Package extends ActionBarActivity {
                 DriverManager.setLoginTimeout(15);
                 conn = DriverManager.getConnection(sqlurl);
                 Statement st = conn.createStatement();
-                String query = "SELECT * FROM _parcels_  where id=1"; //where sender=" + fb_user_id; //actual query
+                String query = "SELECT * FROM _parcels_  where id=" + id; //where sender=" + fb_user_id; //actual query
                 ResultSet rs = st.executeQuery(query);
                 Boolean empty = true;
                 while (rs.next()) {
