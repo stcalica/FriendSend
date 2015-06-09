@@ -7,23 +7,36 @@
     tools:context="teaminfamous.com.friendsend.Package"
     android:background="#009999">
     <TextView
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:id="@+id/pkgname"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#009999"/>
     <TextView
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:id="@+id/reciever"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#009999"/>
     <TextView
-        android:layout_margin="15dp"
+        android:layout_margin="10dp"
         android:id="@+id/trust_level"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="#009999"/>
+    <TextView
+        android:layout_margin="10dp"
+        android:id="@+id/etaDate"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#009999"/>
+    <TextView
+        android:id="@+id/description"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#009999"/>
+
     <Button
         android:onClick="HandOver"
         android:text="Handover"

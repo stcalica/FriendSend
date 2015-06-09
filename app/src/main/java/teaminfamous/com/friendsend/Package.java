@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +17,9 @@ import java.sql.Statement;
 public class Package extends ActionBarActivity {
     String sqlurl = "jdbc:postgresql://10.0.2.2/FriendSend?user=postgres&password=barry1";
     int id;
-
+    String pkgName;
+    String trustlvl;
+    String descrip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +27,10 @@ public class Package extends ActionBarActivity {
         Bundle extra = getIntent().getExtras();
         id = extra.getInt("i");
         new GetPackage().execute();
+        TextView name  = (TextView) findViewById(R.id.pkgname);
+        TextView trust  = (TextView) findViewById(R.id.trust_level);
+
+
     }
 
     @Override
@@ -74,9 +81,14 @@ public class Package extends ActionBarActivity {
                 while (rs.next()) {
                     empty = false;
                     String tmp;
+                    String lvltmp;
                     tmp = rs.getString("name");
+                    lvltmp = rs.getString("trust_level");
+                    pkgName = tmp;
+                    trustlvl = lvltmp;
+                    //descrip = rs.getString("description")
+                    //String eta = rs.getString("delv_date");
                     Log.d("JakeDebug", "Pkgs Query: " + tmp);
-
                 }
                 //no matches
                 if (empty) {
