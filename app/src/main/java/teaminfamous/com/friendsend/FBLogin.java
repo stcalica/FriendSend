@@ -154,6 +154,7 @@ public class FBLogin  extends ActionBarActivity {
                     @Override
                     public void onCompleted(JSONArray jsonArray, GraphResponse graphResponse) {
                         Log.d("Json", jsonArray.toString());
+                        //returns empty unless friends have authorized the app
                     }
                 });
                 friendRequest.executeAsync();
